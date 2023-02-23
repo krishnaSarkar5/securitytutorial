@@ -3,6 +3,7 @@ package com.secuirityTutorial.common.ExceptionHandler;
 
 
 import com.secuirityTutorial.authentication.dto.ErrorMessage;
+import com.secuirityTutorial.common.exception.OAuth2AuthenticationProcessingException;
 import com.secuirityTutorial.common.exception.ServiceException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,18 @@ public class AppExceptionHandler {
 			});
 		return new ResponseEntity<Map<String, String>>(resp,new HttpHeaders(),HttpStatus.BAD_REQUEST);
 		
+	}
+
+	@ExceptionHandler(value= OAuth2AuthenticationProcessingException.class)
+	public ResponseEntity<Map<String, String>> handleOAuth2AuthenticationProcessingException(OAuth2AuthenticationProcessingException ex,WebRequest request){
+
+		Map<String, String> resp = new HashMap<>();
+
+			resp.put("Authentication", ex.getLocalizedMessage());
+
+
+		return new ResponseEntity<Map<String, String>>(resp,new HttpHeaders(),HttpStatus.UNAUTHORIZED);
+
 	}
 	
 	

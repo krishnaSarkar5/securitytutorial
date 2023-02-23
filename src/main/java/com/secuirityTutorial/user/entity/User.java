@@ -1,8 +1,10 @@
 package com.secuirityTutorial.user.entity;
 
+import com.secuirityTutorial.common.enums.AuthProvider;
 import com.secuirityTutorial.common.enums.Role;
 import com.secuirityTutorial.common.enums.Status;
 import com.secuirityTutorial.user.dto.request.RegistrationRequestDto;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,6 +40,13 @@ public class User {
 
     private String address;
 
+//    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
+
+    private String imageUrl;
 
     private Integer callCharge;
 

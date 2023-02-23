@@ -6,8 +6,10 @@ import com.secuirityTutorial.authentication.dto.ResponseDto;
 import com.secuirityTutorial.authentication.service.AuthenticationService;
 import com.secuirityTutorial.common.enums.Status;
 import com.secuirityTutorial.common.exception.ServiceException;
+import com.secuirityTutorial.common.secuirity.CustomUserDetailsService;
 import com.secuirityTutorial.common.secuirity.JwtUserDetailService;
 import com.secuirityTutorial.common.secuirity.JwtUtils;
+import com.secuirityTutorial.common.secuirity.TokenProvider;
 import com.secuirityTutorial.common.utility.HashStringGenerator;
 import com.secuirityTutorial.admin.entity.Admin;
 import com.secuirityTutorial.admin.entity.AdminLoginToken;
@@ -42,6 +44,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private JwtUserDetailService jwtUserDetailService;
 
     @Autowired
+    private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -56,6 +61,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     
     @Autowired
     private AdminLoginTokenRepository adminLoginTokenRepository;
+
+    @Autowired
+    private TokenProvider tokenProvider;
 
 //    @Autowired
 //    private CommonUtils commonUtils;
@@ -101,7 +109,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private ResponseDto getJwtTokenForUser(User existedUser, LoginDto loginDto) {
 
-        UserDetails userDetails = jwtUserDetailService.loadUserByUsername(existedUser.getEmail());
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(existedUser.getEmail());
 
 
         authenticateUser(loginDto, userDetails);
@@ -131,7 +139,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         claims.put("status", existedUser.getStatus());
 
 
-        return "Bearer "+jwtUtils.generateToken(userDetails, claims);
+        return "Bearer "+tokenProvider.generateToken(userDetails, claims);
     }
 
     private void saveUserLoginToken(User existedUser, String token) {
@@ -257,13 +265,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         claims.put("status", existedAdmin.getStatus());
 
 
-        return "Bearer "+jwtUtils.generateToken(userDetails, claims);
+        return "Bearer "+tokenProvider.generateToken(userDetails, claims);
     }
     private void authenticateUser(LoginDto loginDto, UserDetails userDetails) {
         if(!Objects.isNull(loginDto)) {
             try
             {
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetails, hashStringGenerator.reGenerateStorngPasswordHash(loginDto.getPassword(),userDetails.getPassword())));
+//                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetails.getUsername(), hashStringGenerator.reGenerateStorngPasswordHash(loginDto.getPassword(),userDetails.getPassword())));
+//
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetails, loginDto.getPassword()));
+
 //				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDetails, password));
             }
             catch (DisabledException e)
@@ -272,6 +283,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
             catch (BadCredentialsException e)
             {
+                e.printStackTrace();
                 throw new ServiceException("INVALID_CREDENTIALS", HttpStatus.UNAUTHORIZED);
             }
             catch(Exception e)
