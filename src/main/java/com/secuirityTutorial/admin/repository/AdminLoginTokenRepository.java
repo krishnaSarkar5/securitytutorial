@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdminLoginTokenRepository extends JpaRepository<AdminLoginToken,Long> {
 
-    AdminLoginToken findByAdmin_idAndTokenAndStatus(Long id, String requestTokenHeader, String i);
+    AdminLoginToken findByAdmin_emailAndTokenAndStatus(String email, String requestTokenHeader, String i);
 
     AdminLoginToken findByTokenAndStatus(String requestTokenHeader, String i);
 }

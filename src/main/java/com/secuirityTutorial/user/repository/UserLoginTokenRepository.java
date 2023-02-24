@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserLoginTokenRepository extends JpaRepository<UserLoginToken, Long> {
 
-	UserLoginToken findByUser_idAndTokenAndStatus(Long id, String requestTokenHeader, String i);
+	UserLoginToken findByUser_emailAndTokenAndStatus(String email, String requestTokenHeader, String i);
 	
 	UserLoginToken findByTokenAndStatus(String requestTokenHeader, String i);
 

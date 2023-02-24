@@ -7,7 +7,7 @@ import com.secuirityTutorial.authentication.service.AuthenticationService;
 import com.secuirityTutorial.common.enums.Status;
 import com.secuirityTutorial.common.exception.ServiceException;
 import com.secuirityTutorial.common.secuirity.CustomUserDetailsService;
-import com.secuirityTutorial.common.secuirity.JwtUserDetailService;
+//import com.secuirityTutorial.common.secuirity.JwtUserDetailService;
 import com.secuirityTutorial.common.secuirity.JwtUtils;
 import com.secuirityTutorial.common.secuirity.TokenProvider;
 import com.secuirityTutorial.common.utility.HashStringGenerator;
@@ -40,8 +40,8 @@ import java.util.Optional;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
 
-    @Autowired
-    private JwtUserDetailService jwtUserDetailService;
+//    @Autowired
+//    private JwtUserDetailService jwtUserDetailService;
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
@@ -233,7 +233,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private ResponseDto getJwtTokenForAdmin(Admin existedAdmin, LoginDto loginDto) {
 
-        UserDetails userDetails = jwtUserDetailService.loadUserByUsername(existedAdmin.getEmail());
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(existedAdmin.getEmail());
 
 
         authenticateUser(loginDto, userDetails);

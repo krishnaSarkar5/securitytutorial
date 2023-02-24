@@ -132,7 +132,6 @@ package com.secuirityTutorial.common.config;
 
 
 import com.secuirityTutorial.common.secuirity.CustomUserDetailsService;
-import com.secuirityTutorial.common.secuirity.JwtUserDetailService;
 import com.secuirityTutorial.common.secuirity.RestAuthenticationEntryPoint;
 import com.secuirityTutorial.common.secuirity.TokenAuthenticationFilter;
 import com.secuirityTutorial.common.secuirity.oauth2.CustomOAuth2UserService;
@@ -171,8 +170,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    @Autowired
-    private JwtUserDetailService jwtUserDetailService;
+//    @Autowired
+//    private JwtUserDetailService jwtUserDetailService;
 
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
@@ -240,7 +239,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/",
                         "/error",
-                        "/favicon.ico", "/swagger*/**","/v2/api-docs","/webjars/**","/authentication/**","/demo/**",
+                        "/favicon.ico", "/swagger*/**","/v2/api-docs","/webjars/**","/authentication/login","/demo/**",
                         "/**/*.png","**/swagger-resources/**",
                         "/swagger-ui.html",
                         "/**/*.gif",

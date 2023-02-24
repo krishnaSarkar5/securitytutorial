@@ -11,67 +11,67 @@ import java.util.stream.Collectors;
 
 
 
-public class JwtUserDetails implements UserDetails{
+public class JwtUserDetails {
 	
-	
-	
-	private String username;
-	
-	private String password;
-	
-	private boolean isActive;
-	private List<String> listAuthority;
-	
-	
-	public JwtUserDetails(String username, String password, List<String> listAuthority, boolean isActive) {
-		super();
-		this.username = username;
-		this.password = password;
-		this.listAuthority = listAuthority;
-		this.isActive = isActive;
-	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return listAuthority.stream()
-				.map(role -> new SimpleGrantedAuthority(role))
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		return password;
-	}
-
-	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		return username;
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return isActive;
-	}
+//
+//
+//	private String username;
+//
+//	private String password;
+//
+//	private boolean isActive;
+//	private List<String> listAuthority;
+//
+//
+//	public JwtUserDetails(String username, String password, List<String> listAuthority, boolean isActive) {
+//		super();
+//		this.username = username;
+//		this.password = password;
+//		this.listAuthority = listAuthority;
+//		this.isActive = isActive;
+//	}
+//
+//	@Override
+//	public Collection<? extends GrantedAuthority> getAuthorities() {
+//		return listAuthority.stream()
+//				.map(role -> new SimpleGrantedAuthority(role))
+//				.collect(Collectors.toList());
+//	}
+//
+//	@Override
+//	public String getPassword() {
+//		// TODO Auto-generated method stub
+//		return password;
+//	}
+//
+//	@Override
+//	public String getUsername() {
+//		// TODO Auto-generated method stub
+//		return username;
+//	}
+//
+//	@Override
+//	public boolean isAccountNonExpired() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean isAccountNonLocked() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean isCredentialsNonExpired() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean isEnabled() {
+//		// TODO Auto-generated method stub
+//		return isActive;
+//	}
 
 }

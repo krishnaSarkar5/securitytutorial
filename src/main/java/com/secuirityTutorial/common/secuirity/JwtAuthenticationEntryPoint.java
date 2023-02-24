@@ -10,13 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint{
+public class JwtAuthenticationEntryPoint {
 
-	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response,
-			AuthenticationException authException) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Access Denied !!!");
-	}
+//	@Override
+//	public void commence(HttpServletRequest request, HttpServletResponse response,
+//			AuthenticationException authException) throws IOException, ServletException {
+//		// TODO Auto-generated method stub
+//		response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"Access Denied !!!");
+//	}
 
 }
