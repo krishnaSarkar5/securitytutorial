@@ -1,5 +1,7 @@
 package com.secuirityTutorial.common.secuirity;
 
+import com.secuirityTutorial.admin.entity.Admin;
+import com.secuirityTutorial.authentication.dto.UserToken;
 import com.secuirityTutorial.user.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +20,8 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes;
 
+//    private UserToken userToken;
+
     public UserPrincipal(Long id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.email = email;
@@ -33,6 +37,18 @@ public class UserPrincipal implements OAuth2User, UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
+                authorities
+        );
+    }
+
+    public static UserPrincipal create(Admin admin) {
+        List<GrantedAuthority> authorities = Collections.
+                singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+
+        return new UserPrincipal(
+                admin.getId(),
+                admin.getEmail(),
+                admin.getPassword(),
                 authorities
         );
     }

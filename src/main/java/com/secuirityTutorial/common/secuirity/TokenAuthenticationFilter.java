@@ -1,4 +1,7 @@
 package com.secuirityTutorial.common.secuirity;
+import com.secuirityTutorial.admin.entity.Admin;
+import com.secuirityTutorial.authentication.dto.UserToken;
+import com.secuirityTutorial.user.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,4 +62,31 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         }
         return null;
     }
+
+
+
+    private UserToken getPrinciple(User user){
+
+        UserToken principal=new UserToken();
+        principal.setId(user.getId());
+        principal.setStatus(user.getStatus());
+        principal.setUsername(user.getEmail());
+
+        principal.setUser(user);
+
+        return principal;
+    }
+
+    private UserToken getPrinciple(Admin admin){
+
+        UserToken principal=new UserToken();
+        principal.setId(admin.getId());
+        principal.setStatus(admin.getStatus());
+        principal.setUsername(admin.getEmail());
+
+        principal.setUser(admin);
+
+        return principal;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.secuirityTutorial.common.secuirity.oauth2;
 
 
 import com.secuirityTutorial.common.enums.AuthProvider;
+import com.secuirityTutorial.common.enums.Status;
 import com.secuirityTutorial.common.exception.OAuth2AuthenticationProcessingException;
 import com.secuirityTutorial.common.secuirity.UserPrincipal;
 import com.secuirityTutorial.common.secuirity.oauth2.user.OAuth2UserInfo;
@@ -73,7 +74,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 //        user.setName(oAuth2UserInfo.getName());
         user.setEmail(oAuth2UserInfo.getEmail());
         user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        user.setStatus(Status.ACTIVE.toString());
+
+        Status.ACTIVE.equals(Status.ACTIVE);
         return userRepository.save(user);
+
+
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
