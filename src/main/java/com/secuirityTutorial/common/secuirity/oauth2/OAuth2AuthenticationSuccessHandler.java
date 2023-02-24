@@ -3,14 +3,21 @@ package com.secuirityTutorial.common.secuirity.oauth2;
 
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.secuirityTutorial.common.config.AppProperties;
+import com.secuirityTutorial.common.enums.Status;
 import com.secuirityTutorial.common.exception.BadRequestException;
 import com.secuirityTutorial.common.secuirity.TokenProvider;
 import com.secuirityTutorial.common.utility.CookieUtils;
+import com.secuirityTutorial.user.entity.User;
+import com.secuirityTutorial.user.entity.UserLoginToken;
+import com.secuirityTutorial.user.repository.UserLoginTokenRepository;
+import com.secuirityTutorial.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -18,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URI;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.secuirityTutorial.common.secuirity.oauth2.HttpCookieOAuth2AuthorizationRequestRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
@@ -31,6 +41,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private AppProperties appProperties;
 
     private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+
+    @Autowired
+    private UserLoginTokenRepository userLoginTokenRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
 
     @Autowired
@@ -50,6 +66,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             return;
         }
 
+        String token = targetUrl.split("token=")[1];
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        Map princpleMap = objectMapper.convertValue(authentication.getPrincipal(), Map.class);
+
+
+        saveToken(princpleMap.get("email").toString(),token);
+
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
@@ -65,7 +90,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        String token = tokenProvider.createToken(authentication);
+        String token ="Bearer " +tokenProvider.createToken(authentication);
 
         return UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("token", token)
@@ -91,5 +116,26 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                     }
                     return false;
                 });
+    }
+
+
+    private void saveToken(String email, String token){
+
+        User existingUserByEmail = getExistingUserByEmail(email);
+
+        UserLoginToken userLoginToken = new UserLoginToken();
+
+        userLoginToken.setToken(token);
+        userLoginToken.setLoginTime(LocalDateTime.now());
+        userLoginToken.setUser(existingUserByEmail);
+        userLoginToken.setCreatedAt(LocalDateTime.now());
+        userLoginToken.setStatus(Status.ACTIVE.toString());
+        userLoginToken.setUpdatedAt(LocalDateTime.now());
+        userLoginTokenRepository.save(userLoginToken);
+    }
+
+
+    private User getExistingUserByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow(()->new RuntimeException("User not found"));
     }
 }

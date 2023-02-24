@@ -30,7 +30,7 @@ spring:
           google:
             clientId: 766951687611-ukhvuidmndgl1r884u9gq2vb4ib7q95s.apps.googleusercontent.com
             clientSecret: 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
-            redirectUri: "http://localhost:8080/oauth2/callback/abc"
+            redirectUri: "http://localhost:8080/oauth2/callback/google"
             authorizationGrantType: authorization_code
             scope:
               - email
@@ -69,6 +69,7 @@ app:
       - http://localhost:8080/oauth2/callback/google
       - myandroidapp://oauth2/redirect
       - myiosapp://oauthredirect
+      - http://localhost:3000
 
 
 
